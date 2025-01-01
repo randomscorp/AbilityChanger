@@ -1,6 +1,8 @@
-﻿namespace AbilityChanger
+﻿using System.Data;
+
+namespace AbilityChanger
 {
-    public class Scream : AbilityManager
+    public class ScreamManager : AbilityManagerFSM 
     {
         public override string abilityName { get; protected set; } = Abilities.SCREAM;
         public override bool hasDefaultAbility()  => (PlayerDataPatcher.GetIntInternal(PlayerDataPatcher.screamLevel)) > 0;
@@ -16,29 +18,21 @@
         {
             get
             {
-                return $"INV_DESC_SPELL_CREAM{PlayerData.instance.GetIntInternal(nameof(PlayerData.screamLevel))}";
+                return $"INV_DESC_SPELL_SCREAM{PlayerData.instance.GetIntInternal(nameof(PlayerData.screamLevel))}";
             }
             protected set { }
         }
-        public Scream() : base() { }
-        public override GameObject getIconGo() => InvGo.Find("Spell Scream");
+
+        public override List<string> relatedManagers => new() {Abilities.QUAKE, Abilities.FOCUS, Abilities.FIREBALL };
+
+        public override string fsmName => AbilitiesFSMs.SPELLCONTROL;
+
+        public ScreamManager() : base() { }
+        public override GameObject getIconGo() =>  InvGo.Find("Spell Scream");
 
         public override void OnFsmEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
         {
             orig(self);
-            if (self.gameObject.name == "Knight" && self.FsmName == "Spell Control")
-            {
-                self.Intercept(new TransitionInterceptor()
-                {
-                    fromState = "Has Scream?",
-                    eventName = "CAST",
-                    toStateDefault = "Scream Get?",
-                    toStateCustom = "Inactive",
-                    shouldIntercept = () => this.isCustom(),
-                    onIntercept = (fsmstate, fsmevent) => this.handleAbilityUse(fsmstate, fsmevent)
-                });
-
-            }
             if (self.gameObject.name == "Inv" && self.FsmName == "UI Inventory")
             {
                 self.Intercept(new EventInterceptor()
@@ -46,19 +40,11 @@
                     fromState = "Scream",
                     eventName = "UI CONFIRM",
                     onIntercept = () => {
-                        currentlySelected = nextAbility().name;
+                        currentAbility = nextAbility();
                         updateInventory();
                     }
                 });
             }
         }
-
-
-
-
-
-
-
-
     }
 }

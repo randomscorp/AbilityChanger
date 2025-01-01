@@ -14,12 +14,22 @@
         public static string QUAKE { get; } = "Quake";
         public static string FOCUS { get; } = "Focus";
         public static string DOUBLEJUMP { get; } = "DoubleJump";
-
-        // pending to implement 
         public static string DREAMNAIL { get; } = "Dream Nail";
         public static string SUPERDASH { get; } = "Super Dash";
+
+        // pending to implement 
         public static string ACIDARMOUR { get; } = "Acid Armour";
         public static string LANTERN { get; } = "Lantern";
     }
+    
+    public static class AbilitiesFSMs
+    {
+        public static string DREAMNAIL { get; } = "Dream Nail";
+        public static string NAILARTS { get; } = "Nail Arts";
+        public static string SPELLCONTROL { get; } = "Spell Control";
+        public static string SUPERDASH { get; } = "Superdash";
 
+        public static string[] names = new string[] { NAILARTS, DREAMNAIL, SPELLCONTROL, SUPERDASH };
+
+    }
 }

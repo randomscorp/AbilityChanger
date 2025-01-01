@@ -5,19 +5,19 @@ namespace AbilityChanger
            int count = 1;
            Dictionary<int,AbilityManager> IndexToAbility = new();
            if(PlayerDataPatcher.GetBool(PlayerDataPatcher.hasDash)){
-               IndexToAbility[count] = AbilityChanger.AbilityMap[Abilities.DASH];
+               IndexToAbility[count] = AbilityChanger.ManagersMap[Abilities.DASH];
                count++;
            } 
            if(PlayerDataPatcher.GetBool(PlayerDataPatcher.hasWalljump)){
-               IndexToAbility[count] = AbilityChanger.AbilityMap[Abilities.WALLJUMP];
+               IndexToAbility[count] = AbilityChanger.ManagersMap[Abilities.WALLJUMP];
                count++;
            } 
            if(PlayerDataPatcher.GetBool(PlayerDataPatcher.hasSuperDash)){
-               //IndexToAbility[count] = AbilityChanger.AbilityMap[SuperDash.abilityName];
+               IndexToAbility[count] = AbilityChanger.ManagersMap[Abilities.SUPERDASH];
                count++;
            } 
            if(PlayerDataPatcher.GetBool(PlayerDataPatcher.hasDoubleJump)){
-               IndexToAbility[count] = AbilityChanger.AbilityMap[Abilities.DOUBLEJUMP];
+               IndexToAbility[count] = AbilityChanger.ManagersMap[Abilities.DOUBLEJUMP];
                count++;
            } 
            if(PlayerDataPatcher.GetBool(PlayerDataPatcher.hasAcidArmour)){
@@ -64,7 +64,7 @@ namespace AbilityChanger
         public static void changeOption(int index){
             AbilityManager ability = getEquipmentForIndex(index);
             if(ability != null){
-                ability.currentlySelected = ability.nextAbility().name;
+                ability.currentAbility = ability.nextAbility();
                 ability.updateInventory();
             }
         }

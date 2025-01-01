@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32407.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbilityChanger", "AbilityChanger.csproj", "{00840C79-9462-4E07-8920-3F8A32D86747}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbilityChangerExample", "..\Example\AbilityChangerExample.csproj", "{F088A4C3-2D0A-4F6C-893E-C898FE43E19B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{00840C79-9462-4E07-8920-3F8A32D86747}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00840C79-9462-4E07-8920-3F8A32D86747}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00840C79-9462-4E07-8920-3F8A32D86747}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00840C79-9462-4E07-8920-3F8A32D86747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F088A4C3-2D0A-4F6C-893E-C898FE43E19B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F088A4C3-2D0A-4F6C-893E-C898FE43E19B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F088A4C3-2D0A-4F6C-893E-C898FE43E19B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F088A4C3-2D0A-4F6C-893E-C898FE43E19B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F8ECC86-A881-407E-BD70-7FF5F28BC765}
+	EndGlobalSection
+EndGlobal

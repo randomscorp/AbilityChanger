@@ -23,9 +23,7 @@
 
         public Nail() : base()
         {
-            On.HeroController.Attack += NailTrigger;
         }
-
         public override void OnFsmEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
         {
             orig(self);
@@ -36,29 +34,13 @@
                     fromState = "Nail",
                     eventName = "UI CONFIRM",
                     onIntercept = () => {
-                        Modding.Logger.Log("oi");
-                        currentlySelected = nextAbility().name;
+                        currentAbility = nextAbility();
                         updateInventory();
                     }
                 });
             }
 
         }
-
-
-        private void NailTrigger(On.HeroController.orig_Attack orig, HeroController self, GlobalEnums.AttackDirection attackDir)
-        {
-           
-            if (isCustom())
-            {
-                this.handleAbilityUse();
-            }
-            else
-            {
-                orig(self,attackDir);
-            }
-        }
-        public override GameObject getIconGo() => InvGo.Find("Nail");
-
+        public override GameObject getIconGo() =>  InvGo.Find("Nail");
     }
 }

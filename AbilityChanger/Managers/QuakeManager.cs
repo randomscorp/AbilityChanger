@@ -1,6 +1,6 @@
-﻿namespace AbilityChanger
+namespace AbilityChanger
 {
-    public class Quake : AbilityManager
+    public class QuakeManager : AbilityManagerFSM
     {
        
         public override string abilityName { get; protected set; } = Abilities.QUAKE;
@@ -21,25 +21,17 @@
             }
             protected set { }
         }
-        public Quake() : base() {}
-        public override GameObject getIconGo() => InvGo.Find("Spell Quake");
+
+        public override List<string> relatedManagers => new() {Abilities.FIREBALL,Abilities.SCREAM,Abilities.FOCUS };
+
+        public override string fsmName => AbilitiesFSMs.SPELLCONTROL;
+
+        public QuakeManager() : base() {}
+        public override GameObject getIconGo() =>  InvGo.Find("Spell Quake");
 
         public override void OnFsmEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
         {
             orig(self);
-            if (self.gameObject.name == "Knight" && self.FsmName == "Spell Control")
-            {
-                self.Intercept(new TransitionInterceptor()
-                {
-                    fromState = "Has Quake?",
-                    eventName = "CAST",
-                    toStateDefault = "On Gound?",
-                    toStateCustom = "Inactive",
-                    shouldIntercept = () => this.isCustom(),
-                    onIntercept = (fsmstate, fsmevent) => this.handleAbilityUse(fsmstate, fsmevent)
-                });
-
-            }
             if (self.gameObject.name == "Inv" && self.FsmName == "UI Inventory")
             {
                 self.Intercept(new EventInterceptor()
@@ -47,19 +39,11 @@
                     fromState = "Quake",
                     eventName = "UI CONFIRM",
                     onIntercept = () => {
-                        currentlySelected = nextAbility().name;
+                        currentAbility = nextAbility();
                         updateInventory();
                     }
                 });
             }
         }
-
-
-
-
-
-
-
-
     }
 }
