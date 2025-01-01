@@ -6,3 +6,5 @@ global using System.Collections.Generic;
 global using System.Linq;
 global using UnityEngine;
 global using static Satchel.GameObjectUtils;
+global using HutongGames.PlayMaker;
+global using AC = AbilityChanger.AbilityChanger;
