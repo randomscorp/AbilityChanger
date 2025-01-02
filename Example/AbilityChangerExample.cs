@@ -1,8 +1,8 @@
-﻿using AbilityChanger;
-using Modding;
-using Satchel;
+﻿using Modding;
 using System;
 using UnityEngine;
+using AbilityChanger;
+using Satchel;
 using static AbilityChanger.AbilityChanger;
 using AbilityChanger.Base;
 using Satchel.Futils;

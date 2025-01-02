@@ -12,3 +12,4 @@
 - [ ] Make the examples
 - [ ] Remove/handle inactive sprite
 - [ ] Move relatedManagers logic to fsm only
+- [ ] Load priority
