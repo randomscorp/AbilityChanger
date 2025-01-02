@@ -13,21 +13,23 @@ will save your aquired abilities and autoequip the previously equiped ones after
 
 Ability Changer is built with [Satchel](https://github.com/PrashantMohta/Satchel)
 # How it works
-AC works by calling actions registered in the ´OnSelect´ and ´OnUnselect´ delegates every time a switch occurs. This has different meanings for FSM abilities and Non-fsm abilities
+AC works by calling actions registered in the Â´OnSelectÂ´ and Â´OnUnselectÂ´ delegates every time a switch occurs. This has different meanings for FSM abilities and Non-fsm abilities
 so we'll go through them separetly:
 
 ## FSM abilities
 
-For FSM abilities, AC maitains a copy of the vannila FSM that will replace the original. When ´OnSelect´ is called, AC disables the vannila FSM and enables the custom one
+For FSM abilities, AC maitains a copy of the vannila FSM that will replace the original. When Â´OnSelectÂ´ is called, AC disables the vannila FSM and enables the custom one
 (unless all equiped abilities that uses that FSM are not custom then the vannila one will be exposed) meaning that AC's environment is completly isolated from other mods. 
-You can register a delegate to ´OnSelect´ and modify the FSM as you normally would for a mod, the modfied FSM can be accessed by the name ´{vannilaFSMName} AC´ or directly from
-the ´myFSM´ porprierty on the base class.
+You can register a delegate to Â´OnSelectÂ´ and modify the FSM as you normally would for a mod, the modfied FSM can be accessed by the name Â´{vannilaFSMName} ACÂ´ or directly from
+the Â´myFSMÂ´ porprierty on the base class.
 
-Because some abilities will share the FSM, when ´OnSelect´ is called AC resets the whole FSM and not only calls the actions registered by the switched ability, but all the 
-other ones registered by all abilities that use the FSM. That means there is no need to undo your changes on ´OnUnselect´ and actions registered there should be reserved to
-undo permanent effects in the world, like despawning GameObjects that interact with your ability. It also means that you have access to the whole FSM, to guide you on what states
-AC considers your's to modify you can check the ´states´ proprierty within the base class. Every state in ´states´ is considered the domain of your ability and you should
-feel free to modify them as you please. There are also states AC considers to be shared between abilities and they are avaiabled in the ´commonStates´ proprierty. When making
+Because some abilities will share the FSM, when Â´OnSelectÂ´ is called AC resets the whole FSM and not only calls the actions registered by the switched ability, but all the 
+other ones registered by all abilities that use the FSM. That means there is no need to undo your changes on Â´OnUnselectÂ´ and actions registered there should be reserved to
+undo permanent effects in the world, like despawning GameObjects that interact with your ability. 
+
+It also means that you have access to the whole FSM, to guide you on what states
+AC considers your's to modify you can check the Â´statesÂ´ proprierty within the base class. Every state in Â´statesÂ´ is considered the domain of your ability and you should
+feel free to modify them as you please. There are also states AC considers to be shared between abilities and they are avaiabled in the Â´commonStatesÂ´ proprierty. When making
 changes to those states be as careful as you would with a normal mod as other abilities are expected to also have access to it.
 
 The abilities that are based on FSM and the ones that share one are:
@@ -36,8 +38,7 @@ The abilities that are based on FSM and the ones that share one are:
 * Dream Nail and Dream Gate => Dream Nail
 * Crystal Heart => Super Dash
 
-For example, if you wanted the replace what object that Dream Gate spawns you can
-´´´
+For example, if you wanted the replace what object that Dream Gate spawns you can:
 
     using AbilityChanger;
     using Satchel;
@@ -67,15 +68,25 @@ For example, if you wanted the replace what object that Dream Gate spawns you ca
         }
 
     }
-´´´
+
+Each base class also has a set of methods to handle common cases. For the same case as before:
+
+    public class GreenFlowerDG : Dreamgate
+    {
+        public GreenFlowerDG()
+        {
+            ReplaceSpawn(AbilityChangerExample.flower3);
+            relatedAbilities.Add(AbilityChanger.Abilities.DREAMNAIL, "Green Flower");
+        }
+    }
+You can also ask AC to, when switching tou your ability, try to switch to another if available by adding it's name and type to the Â´relatedAbilitiesÂ´ dictionary.
+
 
 All examples are available in their complete form [here](https://github.com/randomscorp/AbilityChanger/blob/main/Example/AbilityChangerExample.cs)
 
 ## Script based abilities
 
 Non-fsm abilities work as functions in a monobehavior (HeroController) and called every Update/Fixed and you can modify them as you normally would with hooks:
-
-´´´
 
     public class WhiteFlowerWings : DoubleJump
     {
@@ -92,11 +103,10 @@ Non-fsm abilities work as functions in a monobehavior (HeroController) and calle
             orig(self);
         }
     }
-´´´
+    
 Since the hooks happen on game time (instead of On.HeroController.Start where most mods add them), your ability will likely be called before other hooks.
-Note that for those abilities, you **MUST** undo your changes on ´OnUnselect´ otherwise they will persist between switches. To spare you the process of having to do that
+Note that for those abilities, you **MUST** undo your changes on Â´OnUnselectÂ´ otherwise they will persist between switches. To spare you the process of having to do that
 and look for the apropriate functions, Ability Changer offers hooks to the relevant ones:
-´´´
 
     public class RedFlowerWings : DoubleJump
     {
@@ -110,7 +120,7 @@ and look for the apropriate functions, Ability Changer offers hooks to the relev
             });
         }
     }
-´´´
+
 All function hooks must return wheter they want the default behaviour to continue or not.
 
 The script based abilities are:
