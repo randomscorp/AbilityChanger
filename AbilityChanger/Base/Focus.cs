@@ -35,7 +35,7 @@ namespace AbilityChanger.Base
     {
         public static string HeldDown { get; } = "Held Down";
         public static string CanFocus { get; } = "Can Focus?";
-        public static string StartSlugAnim { get; } = "StartSlugAnim";
+        public static string StartSlugAnim { get; } = "Start Slug Anim";
         public static string FocusStart { get; } = "Focus Start";
         public static string SetFocusSpeed { get; } = "Set Focus Speed";
         public static string DeepFocusSpeed { get; } = "Deep Focus Speed";
@@ -84,7 +84,7 @@ namespace AbilityChanger.Base
         public static string SporeCloud2 { get; } = "Spore Cloud 2";
         public static string DungCloud2 { get; } = "Dung Cloud 2";
         public static string FocusLeft { get; } = "Focus Left";
-        public static string FocusRight { get; } = "FocusRight";
+        public static string FocusRight { get; } = "Focus Right";
 
     }
 }

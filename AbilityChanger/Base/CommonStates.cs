@@ -16,7 +16,7 @@ namespace AbilityChanger.Base
             public static string FsmCancel { get; } = "Fsm Cancel";
             public static string DreamConvo { get; } = "Dream Convo";
             public static string RegainControl { get; } = "Regain Control";
-            public static string TakeConterol { get; } = "TakeControl";
+            public static string TakeConterol { get; } = "Take Control";
             public static string Start { get; } = "Start";
             public static string IdleAnim { get; } = "Idem Anim";
             public static string EntryCancelCheck { get; } = "Entry Cancel Check";
