@@ -7,16 +7,13 @@ namespace AbilityChanger.Base
         public override string abilityType => Abilities.QUAKE;
         public PlayMakerFSM myFsm => AbilityChanger.FsmMap[AbilitiesFSMs.SPELLCONTROL];
 
-
-        private Action trigger;
         /// <summary>
-        /// Register an anction to called when the ability would start
+        /// Register an action to be called when the ability would start
         /// </summary>
-        /// <param name="triggerFunc"> the action to call</param>
-        /// <param name="shouldContinue"> if the default behaviour should continue </param>
-        public void RegisterTrigger(Action triggerFunc, bool shouldContinue)
+        /// <param name="triggerAction"> the action to call</param>
+        /// <param name="shouldContinue"> if the default behaviour should continue after </param>
+        public void OnTrigger(Action triggerAction, bool shouldContinue)
         {
-            trigger = triggerFunc;
             OnSelect += () =>
             {
                 myFsm.Intercept(new TransitionInterceptor()
@@ -26,10 +23,56 @@ namespace AbilityChanger.Base
                     eventName ="CAST",
                     toStateCustom = shouldContinue ? states.OnGround : commonStates.SpellEnd,
                     shouldIntercept = () => true,
-                    onIntercept = (a, b) => trigger()
+                    onIntercept = (a, b) => triggerAction()
                 });
             };
         }
+        /// <summary>
+        /// Register an action to be called when the player lands after a Desolate Dive
+        /// </summary>
+        /// <param name="landAction">The action to be called </param>
+        /// <param name="shouldContinue"> If the default behavior should continue after </param>
+        public void OnLandQuake1(Action landAction, bool shouldContinue)
+        {
+            OnSelect += () =>
+            {
+                myFsm.Intercept(new TransitionInterceptor()
+                {
+                    fromState = states.Quake1Down,
+                    toStateDefault=states.Quake1Land,
+                    eventName="HERO LANDED",
+                    toStateCustom = shouldContinue ? states.Quake1Land : states.QuakeFinish,
+                    shouldIntercept = () => true,
+                    onIntercept = (a,b) => landAction()
+                });
+            };
+        }
+
+        /// <summary>
+        /// Register an action to be called when the player lands after a Descending Dark
+        /// </summary>
+        /// <param name="landAction">The action to be called </param>
+        /// <param name="shouldContinue"> If the default behavior should continue after </param>
+        public void OnLandQuake2(Action landAction, bool shouldContinue)
+        {
+            OnSelect += () =>
+            {
+                myFsm.Intercept(new TransitionInterceptor()
+                {
+                    fromState = states.Quake2Down,
+                    toStateDefault = states.Q2Land,
+                    eventName = "HERO LANDED",
+                    toStateCustom = shouldContinue ? states.Q2Land : states.QuakeFinish,
+                    shouldIntercept = () => true,
+                    onIntercept = (a, b) => landAction()
+                });
+            };
+        }
+
+        /// <summary>
+        /// The FSM states Ability Changer considers belong to this Ability and expects to be modified without repercutions. 
+        /// Shared states between abilities can be accessed withing the Base.CommonStates namespace, changes in those states can affect other abilities and should be done with care  
+        /// </summary>
         public static class states
         {
             public static string HasQuake { get; } = "Has Quake?";

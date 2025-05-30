@@ -10,9 +10,10 @@ namespace AbilityChanger.Base
 
         #region Replace Spawn Hook
         /// <summary>
-        /// Replaces the dream gate game object to be spawned
+        /// Replaces the Dream Gate Game Object to be spawned
         /// </summary>
         /// <param name="prefab"> The game object to spawn </param>
+        /// <param name="position"> The position it should spawn. If not provided, spaws at Dream Gate's default position </param>
         public void ReplaceSpawn(GameObject prefab, Vector3? position=null)
         {
             OnSelect += () =>
@@ -33,6 +34,11 @@ namespace AbilityChanger.Base
             };
         }
         #endregion
+
+        /// <summary>
+        /// The FSM states Ability Changer considers belong to this Ability and expects to be modified without repercutions. 
+        /// Shared states between abilities can be accessed withing the Base.CommonStates namespace, changes in those states can affect other abilities and should be done with care  
+        /// </summary>
         public static class states
         {
             public static string SetChargeStart { get; } = "Set Charge Start";

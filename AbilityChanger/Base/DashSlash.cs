@@ -6,7 +6,12 @@ namespace AbilityChanger.Base
         public override string abilityType => Abilities.DASHSLASH;
         public PlayMakerFSM myFsm => AbilityChanger.FsmMap[AbilitiesFSMs.NAILARTS];
 
-        public void RegisterSpawn(GameObject prefab, Vector3? position = null)
+        /// <summary>
+        /// Replaces the GameObject spawned by Dash Slash
+        /// </summary>
+        /// <param name="prefab"> The GameObject to spawn </param>
+        /// <param name="position"> The position it should spawn. If not provided, spaws at the Knight's current position </param>
+        public void ReplaceSpawn(GameObject prefab, Vector3? position = null)
         {
             OnSelect += () =>
             {
@@ -19,16 +24,13 @@ namespace AbilityChanger.Base
                 }, 0);
             };
         }
-
-        private Action trigger;
         /// <summary>
-        /// Register an anction to called when the ability would start
+        /// Register an action to be called when the ability would start
         /// </summary>
-        /// <param name="triggerFunc"> the action to call</param>
-        /// <param name="shouldContinue"> if the default behaviour should continue </param>
-        public void RegisterTrigger(Action triggerFunc, bool shouldContinue)
+        /// <param name="triggerAction"> the action to call</param>
+        /// <param name="shouldContinue"> if the default behaviour should continue after </param>
+        public void OnTrigger(Action triggerAction, bool shouldContinue)
         {
-            trigger = triggerFunc;
             OnSelect += () =>
             {
                 myFsm.Intercept(new TransitionInterceptor()
@@ -38,11 +40,15 @@ namespace AbilityChanger.Base
                     eventName ="FINISHED",
                     toStateCustom = shouldContinue ? states.DSlashStart : commonStates.RegainControl,
                     shouldIntercept = () => true,
-                    onIntercept = (a, b) => trigger()
+                    onIntercept = (a, b) => triggerAction()
                 });
             };
         }
 
+        /// <summary>
+        /// The FSM states Ability Changer considers belong to this Ability and expects to be modified without repercutions. 
+        /// Shared states between abilities can be accessed withing the Base.CommonStates namespace, changes in those states can affect other abilities and should be done with care  
+        /// </summary>
         public static class states
         {
             public static string HasDash { get; } = "Has Dash?";

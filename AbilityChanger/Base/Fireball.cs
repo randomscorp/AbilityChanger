@@ -6,8 +6,12 @@ namespace AbilityChanger.Base
     {
         public override string abilityType => Abilities.FIREBALL;
         public PlayMakerFSM myFsm => AbilityChanger.FsmMap[AbilitiesFSMs.SPELLCONTROL];
-
-        public void RegisterSpawn(GameObject prefab, Vector3? position = null)
+        /// <summary>
+        /// Replaces the GameObject spawned by Vengefull Spirit
+        /// </summary>
+        /// <param name="prefab"> The GameObject to spawn </param>
+        /// <param name="position"> The position it should spawn. If not provided, spaws at the Knight's current position </param>
+        public void ReplaceSpawnFireball1(GameObject prefab, Vector3? position = null)
         {
             OnSelect += () =>
             {
@@ -18,7 +22,18 @@ namespace AbilityChanger.Base
                                             (Vector3)(position is null ? HeroController.instance.transform.position : position),
                                             Quaternion.identity).SetActive(true);
                 }, 3);
+            };
+        }
 
+        /// <summary>
+        /// Replaces the GameObject spawned by Shade Soul
+        /// </summary>
+        /// <param name="prefab"> The GameObject to spawn </param>
+        /// <param name="position"> The position it should spawn. If not provided, spaws at the Knight's current position </param>
+        public void ReplaceSpawnFireball2(GameObject prefab, Vector3? position = null)
+        {
+            OnSelect += () =>
+            {
                 myFsm.GetValidState("Fireball 2").GetAction(3).Enabled = false;
                 myFsm.InsertCustomAction("Fireball 2", () =>
                 {
@@ -29,15 +44,14 @@ namespace AbilityChanger.Base
             };
         }
 
-        private Action trigger;
+
         /// <summary>
-        /// Register an anction to called when the ability would start
+        /// Register an anction to be called when the ability button is pressed
         /// </summary>
-        /// <param name="triggerFunc"> the action to call</param>
-        /// <param name="shouldContinue"> if the default behaviour should continue </param>
-        public void RegisterTrigger(Action triggerFunc, bool shouldContinue)
+        /// <param name="triggerAction"> the action to call</param>
+        /// <param name="shouldContinue"> if the default behaviour should continue after</param>
+        public void OnTrigger(Action triggerAction, bool shouldContinue)
         {
-            trigger = triggerFunc;
             OnSelect += () =>
             {
                 myFsm.Intercept(new TransitionInterceptor()
@@ -47,10 +61,15 @@ namespace AbilityChanger.Base
                     eventName ="CAST",
                     toStateCustom = shouldContinue ? states.Wallside : commonStates.SpellEnd,
                     shouldIntercept = () => true,
-                    onIntercept = (a, b) => trigger()
+                    onIntercept = (a, b) => triggerAction()
                 });
             };
         }
+
+        /// <summary>
+        /// The FSM states Ability Changer considers belong to this Ability and expects to be modified without repercutions. 
+        /// Shared states between abilities can be accessed withing the Base.CommonStates namespace, changes in those states can affect other abilities and should be done with care  
+        /// </summary>
         public static class states
         {
             public static string HasFireball { get; } = "Has Fireball?";

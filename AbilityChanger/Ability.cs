@@ -4,7 +4,7 @@ namespace AbilityChanger
 {
     public abstract class Ability {
         /// <summary>
-        /// The ability name. It acst as an indentifier for the ability inside the manager. Abilities names must be unique inside each manager
+        /// The ability name. It acts as an indentifier for the ability inside the manager. Abilities names must be unique inside each manager
         /// </summary>
         public abstract string name { get; set; }
         /// <summary>
@@ -57,7 +57,7 @@ namespace AbilityChanger
 
         /// <summary>
         /// Delegate called everytime your ability is unselected. Changes made in manager's FSM are automatically reset while changes made in script/script base managers MUST be undone here.
-        /// Changes made in the environment, destroying GameObjects, can be done here
+        /// Changes made in the environment, like destroying GameObjects, should be done here
         /// </summary>
         public Action OnUnselect;
 
