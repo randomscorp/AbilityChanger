@@ -12,11 +12,11 @@ namespace AbilityChangerExample
 {
     public class RedFlowerDG : Dreamgate
     {
-        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("white_flower.png"); }
-        public override string name { get => "White Flower"; set { } }
+        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("red_flower.png"); }
+        public override string name { get => "Red Flower"; set { } }
 
-        public override string title { get => "White Flower"; set { } }
-        public override string description { get => "Plants a little white delicate flower"; set { } }
+        public override string title { get => "Red Flower"; set { } }
+        public override string description { get => "Plants a little red delicate flower"; set { } }
         public override Sprite activeSprite { get => getActiveSprite(); set { } }
 
         public RedFlowerDG()
@@ -27,7 +27,7 @@ namespace AbilityChangerExample
                 {
                     fromState = states.Set,
                     toStateDefault = states.SpawnGate,
-                    toStateCustom = AbilityChangerExample.white_flower == null ? "Set Fail" : "Set Recover",
+                    toStateCustom = AbilityChangerExample.red_flower == null ? "Set Fail" : "Set Recover",
                     eventName = "FINISHED",
                     shouldIntercept = () => true,
                     onIntercept = (a, b) => GameObject.Instantiate(AbilityChangerExample.red_flower,HeroController.instance.transform.position + new Vector3(0, -1.42f, -0.0035f),
@@ -57,9 +57,9 @@ namespace AbilityChangerExample
     public class RedFlowerWings : DoubleJump
     {
         static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("red_flower.png"); }
-        public override string name { get => "White Flower"; set { } }
-        public override string title { get => "White Flower"; set { } }
-        public override string description { get => "Plants a little green delicate flower"; set { } }
+        public override string name { get => "Red Flower"; set { } }
+        public override string title { get => "Red Flower"; set { } }
+        public override string description { get => "Plants a little red delicate flower"; set { } }
         public override Sprite activeSprite { get => getActiveSprite(); set { } }
 
         public RedFlowerWings()
@@ -70,7 +70,7 @@ namespace AbilityChangerExample
 
         private void SpawnWingsFlower(On.HeroController.orig_DoubleJump orig, HeroController self)
         {
-            GameObject.Instantiate(AbilityChangerExample.white_flower, HeroController.instance.transform.position,
+            GameObject.Instantiate(AbilityChangerExample.red_flower, HeroController.instance.transform.position,
                      Quaternion.identity).SetActive(true);
             orig(self);
         }

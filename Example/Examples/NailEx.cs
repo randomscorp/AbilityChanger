@@ -21,7 +21,7 @@ namespace AbilityChangerExample.Examples
                 return true;
 
             });
-            OnAttackEnd(() =>
+            OnAttackCancel(() =>
             {
                 GameObject.Instantiate(AbilityChangerExample.red_flower, HeroController.instance.transform.position, Quaternion.identity).SetActive(true);
                 return true;

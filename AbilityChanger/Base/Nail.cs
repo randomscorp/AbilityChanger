@@ -25,10 +25,10 @@
         #region CancelAttack
         private Func<bool> onCancelAttack;
         /// <summary>
-        /// Register a function to be called when the nail swing animation ends
+        /// Register a function to be called when the nail swing animation is canceled
         /// </summary>
         /// <param name="func"> The function to be called. It must return <c> true</c> if it wants the default behaviour to continue, <c>false</c> if it doesn't</param>        
-        public void OnAttackEnd(Func<bool> func) 
+        public void OnAttackCancel(Func<bool> func) 
         { 
             onCancelAttack = func;
             OnSelect += () => { On.HeroController.CancelAttack += OnCancelAttack; };

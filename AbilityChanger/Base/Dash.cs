@@ -1,6 +1,4 @@
-﻿using Microsoft.SqlServer.Server;
-
-namespace AbilityChanger.Base
+﻿namespace AbilityChanger.Base
 {
     public abstract class Dash: Ability
     {
