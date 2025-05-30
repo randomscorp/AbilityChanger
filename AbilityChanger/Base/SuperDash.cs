@@ -5,15 +5,13 @@
         public override string abilityType => Abilities.SUPERDASH;
         public PlayMakerFSM myFsm => AbilityChanger.FsmMap[AbilitiesFSMs.SUPERDASH];
 
-        private Action trigger;
         /// <summary>
-        /// Register an anction to called when the ability would start
+        /// Register an action to be called when the ability would start
         /// </summary>
-        /// <param name="triggerFunc"> the action to call</param>
+        /// <param name="triggerAction"> the action to call</param>
         /// <param name="shouldContinue"> if the default behaviour should continue </param>
-        public void RegisterTrigger(Action triggerFunc, bool shouldContinue)
+        public void OnTrigger(Action triggerAction, bool shouldContinue)
         {
-            trigger = triggerFunc;
             OnSelect += () =>
             {
                 myFsm.Intercept(new TransitionInterceptor()
@@ -23,10 +21,40 @@
                     eventName = "FINISHED",
                     toStateCustom = shouldContinue ? states.OnGround : states.RegainControl,
                     shouldIntercept = () => true,
-                    onIntercept = (a, b) => trigger(),
+                    onIntercept = (a, b) => triggerAction(),
                 });
             };
         }
+        /// <summary>
+        /// Register an action to be called every fixed frame during cdash's charging animation
+        /// </summary>
+        /// <param name="chargingAction"></param>
+        public void DuringCharging(Action chargingAction)
+        {
+            OnSelect += () =>
+            {
+                myFsm.InsertAction(states.WallCharge, new CustomFsmActionFixedUpdate(chargingAction), 1);
+                myFsm.InsertAction(states.GroundCharge, new CustomFsmActionFixedUpdate(chargingAction), 2);
+            };
+        }
+
+        /// <summary>
+        /// Register an action to be called every fixed frame during cdash's dash animation
+        /// </summary>
+        /// <param name="dashingAction"></param>
+        public void DuringSuperDash(Action dashingAction)
+        {
+            OnSelect += () =>
+            {
+                myFsm.AddAction(states.Dashing, new CustomFsmActionFixedUpdate(dashingAction));
+                myFsm.AddAction(states.Cancelable, new CustomFsmActionFixedUpdate(dashingAction));
+            };
+        }
+
+        /// <summary>
+        /// The FSM states Ability Changer considers belong to this Ability and expects to be modified without repercutions. 
+        /// Shared states between abilities can be accessed withing the Base.CommonStates namespace, changes in those states can affect other abilities and should be done with care  
+        /// </summary>
         public static class states
         {
             public static string Init { get; } = "Init";

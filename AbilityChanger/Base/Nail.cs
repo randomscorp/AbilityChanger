@@ -10,7 +10,7 @@
         /// Register a function to be called when the nail button is pressed
         /// </summary>
         /// <param name="func"> The function to be called. It must return <c> true</c> if it wants the default behaviour to continue, <c>false</c> if it doesn't</param>
-        public void RegisterAttack(Func<bool> func)
+        public void OnTrigger(Func<bool> func)
         {
             onTriggerAction = func;
             OnSelect += () => { On.HeroController.Attack += NailTrigger; };
@@ -28,7 +28,7 @@
         /// Register a function to be called when the nail swing animation ends
         /// </summary>
         /// <param name="func"> The function to be called. It must return <c> true</c> if it wants the default behaviour to continue, <c>false</c> if it doesn't</param>        
-        public void RegisterCancelAttack(Func<bool> func) 
+        public void OnAttackEnd(Func<bool> func) 
         { 
             onCancelAttack = func;
             OnSelect += () => { On.HeroController.CancelAttack += OnCancelAttack; };

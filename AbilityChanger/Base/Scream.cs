@@ -6,7 +6,12 @@ namespace AbilityChanger.Base
         public override string abilityType => Abilities.SCREAM;
         public PlayMakerFSM myFsm => AbilityChanger.FsmMap[AbilitiesFSMs.SPELLCONTROL];
 
-        public void RegisterSpawn(GameObject prefab, Vector3? position = null)
+        /// <summary>
+        /// Replaces the GameObject spawned by Howlling Wraiths
+        /// </summary>
+        /// <param name="prefab"> The GameObject to spawn </param>
+        /// <param name="position"> The position it should spawn. If not provided, spaws at the Knight's current position </param>
+        public void ReplaceSpawnScream1(GameObject prefab, Vector3? position = null)
         {
             OnSelect += () =>
             {
@@ -23,30 +28,42 @@ namespace AbilityChanger.Base
                 });
             };
 
-            myFsm.Intercept(new TransitionInterceptor()
-            {
-                fromState = "Scream Burst 2",
-                toStateDefault = "End Roar 2",
-                toStateCustom = "Spell End",
-                eventName = "FINISHED",
-                shouldIntercept = () => true,
-                onIntercept = (a, b) => GameObject.Instantiate(prefab,
-                                        (Vector3)(position is null ? HeroController.instance.transform.position + new Vector3(0, -1.42f, -0.0035f) : position),
-                                        Quaternion.identity).SetActive(true)
-            });
         }
-        private Action trigger;
+
         /// <summary>
-        /// Register an anction to called when the ability would start
+        /// Replaces the GameObject spawned by Abyss Shriek
         /// </summary>
-        /// <param name="triggerFunc"> the action to call</param>
-        /// <param name="shouldContinue"> if the default behaviour should continue </param>
-        public void RegisterTrigger(Action triggerFunc, bool shouldContinue)
+        /// <param name="prefab"> The GameObject to spawn </param>
+        /// <param name="position"> The position it should spawn. If not provided, spaws at the Knight's current position </param>
+        public void ReplaceSpawnScream2(GameObject prefab, Vector3? position = null)
         {
             OnSelect += () =>
             {
 
-                trigger = triggerFunc;
+                myFsm.Intercept(new TransitionInterceptor()
+                {
+                    fromState = "Scream Burst 2",
+                    toStateDefault = "End Roar 2",
+                    toStateCustom = "Spell End",
+                    eventName = "FINISHED",
+                    shouldIntercept = () => true,
+                    onIntercept = (a, b) => GameObject.Instantiate(prefab,
+                                            (Vector3)(position is null ? HeroController.instance.transform.position + new Vector3(0, -1.42f, -0.0035f) : position),
+                                            Quaternion.identity).SetActive(true)
+                });
+            };
+        }
+
+        /// <summary>
+        /// Register an action to be called when the ability would start
+        /// </summary>
+        /// <param name="triggerAction"> the action to call</param>
+        /// <param name="shouldContinue"> if the default behaviour should continue </param>
+        public void OnTrigger(Action triggerAction, bool shouldContinue)
+        {
+            OnSelect += () =>
+            {
+
                 myFsm.Intercept(new TransitionInterceptor()
                 {
                     fromState = states.HasScream,
@@ -54,10 +71,15 @@ namespace AbilityChanger.Base
                     eventName = "CAST",
                     toStateCustom = shouldContinue ? states.ScreamGet : commonStates.SpellEnd,
                     shouldIntercept = () => true,
-                    onIntercept = (a, b) => trigger(),
+                    onIntercept = (a, b) => triggerAction(),
                 });
             };
         }
+
+        /// <summary>
+        /// The FSM states Ability Changer considers belong to this Ability and expects to be modified without repercutions. 
+        /// Shared states between abilities can be accessed withing the Base.CommonStates namespace, changes in those states can affect other abilities and should be done with care  
+        /// </summary>
         public static class states
         {
             public static string HasScream { get; } = "Has Scream?";

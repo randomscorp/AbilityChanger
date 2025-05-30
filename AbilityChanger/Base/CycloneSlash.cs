@@ -7,16 +7,20 @@ namespace AbilityChanger.Base
         public override string abilityType => Abilities.CYCLONESLASH;
 
         public PlayMakerFSM myFsm => AbilityChanger.FsmMap[AbilitiesFSMs.NAILARTS];
-
-        public void RegisterSpawn(GameObject prefab, Vector3? position=null)
+        /// <summary>
+        /// Replaces the GameObject spawned when cyclone starts
+        /// </summary>
+        /// <param name="prefab"> the GamewObject to be spawned</param>
+        /// <param name="position"> The position it should spawn. If not provided, spaws at the Knight's current position </param>
+        public void ReplaceSpawn(GameObject prefab, Vector3? position=null)
         {
             OnSelect += () =>
             {
                 myFsm.Intercept( new TransitionInterceptor()
                 {
-                    fromState = "Flash",
-                    toStateDefault = "Cyclone Start",
-                    toStateCustom = "Regain Control",
+                    fromState = states.Flash,
+                    toStateDefault = states.CycloneStart,
+                    toStateCustom = commonStates.RegainControl,
                     eventName = "FINISHED",
                     shouldIntercept = () => true,
                     onIntercept = (a, b) => GameObject.Instantiate(prefab,
@@ -26,15 +30,13 @@ namespace AbilityChanger.Base
             };
         }
 
-        private Action trigger;
         /// <summary>
-        /// Register an anction to called when the ability would start
+        /// Register an action to be called when the ability would start
         /// </summary>
-        /// <param name="triggerFunc"> the action to call</param>
-        /// <param name="shouldContinue"> if the default behaviour should continue </param>
-        public void RegisterTrigger(Action triggerFunc, bool shouldContinue)
+        /// <param name="triggerAction"> the action to call</param>
+        /// <param name="shouldContinue"> if the default behaviour should continue after </param>
+        public void OnTrigger(Action triggerAction, bool shouldContinue)
         {
-            trigger = triggerFunc;
             OnSelect += () =>
             {
                 myFsm.Intercept(new TransitionInterceptor()
@@ -44,11 +46,29 @@ namespace AbilityChanger.Base
                     eventName ="FINISHED",
                     toStateCustom = shouldContinue ? states.Flash : commonStates.RegainControl,
                     shouldIntercept =()=> true,
-                    onIntercept = (a,b) => trigger()
+                    onIntercept = (a,b) => triggerAction()
                 });
             };
         }
 
+        /// <summary>
+        /// Register an action to be called every fixed frame during cyclone's slashing animation and extended animation
+        /// </summary>
+        /// <param name="action"></param>
+        public void DuringSlash(Action action)
+        {
+            OnSelect += () =>
+            {
+                myFsm.InsertAction(states.CycloneSpin, new CustomFsmActionFixedUpdate(action), 1);
+                myFsm.InsertAction(states.CycloneExtend, new CustomFsmActionFixedUpdate(action), 1);
+            };
+        }
+        
+        // TODO: This can prob be replaced by abstract proprierty in a interface (?) which would skip having to copy the docstring in every file
+        /// <summary>
+        /// The FSM states Ability Changer considers belong to this Ability and expects to be modified without repercutions. 
+        /// Shared states between abilities can be accessed withing the Base.CommonStates namespace, changes in those states can affect other abilities and should be done with care  
+        /// </summary>
         public static class states
         {
             public static string HasCyclone { get; } = "Has Cyclone?";

@@ -94,7 +94,7 @@ namespace AbilityChanger
             // Iniates abilities and equipes the saved ones
             foreach (KeyValuePair<string, AbilityManager> manager in ManagersMap)
             {
-                if (settings.equipedAbilities.ContainsKey(manager.Key) && manager.Value.currentAbility.name != settings.equipedAbilities[manager.Key])
+                if (settings.equipedAbilities.ContainsKey(manager.Key) )
                 {
                     var ability = manager.Value.getAbility(settings.equipedAbilities[manager.Key]);
                     if (ability.aquiredAbility) manager.Value.setAbility(ability);
