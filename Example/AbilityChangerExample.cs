@@ -39,20 +39,6 @@ namespace AbilityChangerExample
         }
 
     }
-    public class GreenFlowerDG : Dreamgate
-    {
-        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("green_flower.png"); }
-        public override string name { get => "Green Flower"; set { } }
-        public override string title { get => "Green Flower"; set { } }
-        public override string description { get => "Plants a little green delicate flower"; set { } }
-        public override Sprite activeSprite { get => getActiveSprite(); set { } }
-
-        public GreenFlowerDG()
-        {
-            ReplaceSpawn(AbilityChangerExample.green_flower);
-            relatedAbilities.Add(AbilityChanger.Abilities.DREAMNAIL, "Green Flower");
-        }
-    }
 
     public class RedFlowerWings : DoubleJump
     {
@@ -121,7 +107,6 @@ namespace AbilityChangerExample
 
             abilities = new() {
                     new RedFlowerDG (),
-                    new GreenFlowerDG(),
                     new RedFlowerWings(),
                     new Examples.CycloneSlashEx(),
                     new Examples.DashEx(),
