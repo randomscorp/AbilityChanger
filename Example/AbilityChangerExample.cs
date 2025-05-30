@@ -13,9 +13,9 @@ namespace AbilityChangerExample
     public class RedFlowerDG : Dreamgate
     {
         static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("red_flower.png"); }
-        public override string name { get => "Red Flower"; set { } }
+        public override string name { get => "Red Flower DG"; set { } }
 
-        public override string title { get => "Red Flower"; set { } }
+        public override string title { get => "Red Flower DG"; set { } }
         public override string description { get => "Plants a little red delicate flower"; set { } }
         public override Sprite activeSprite { get => getActiveSprite(); set { } }
 
@@ -38,20 +38,6 @@ namespace AbilityChangerExample
             };
         }
 
-    }
-    public class GreenFlowerDG : Dreamgate
-    {
-        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("green_flower.png"); }
-        public override string name { get => "Green Flower"; set { } }
-        public override string title { get => "Green Flower"; set { } }
-        public override string description { get => "Plants a little green delicate flower"; set { } }
-        public override Sprite activeSprite { get => getActiveSprite(); set { } }
-
-        public GreenFlowerDG()
-        {
-            ReplaceSpawn(AbilityChangerExample.green_flower);
-            relatedAbilities.Add(AbilityChanger.Abilities.DREAMNAIL, "Green Flower");
-        }
     }
 
     public class RedFlowerWings : DoubleJump
@@ -120,9 +106,6 @@ namespace AbilityChangerExample
             #endregion
 
             abilities = new() {
-                    new RedFlowerDG (),
-                    new GreenFlowerDG(),
-                    new RedFlowerWings(),
                     new Examples.CycloneSlashEx(),
                     new Examples.DashEx(),
                     new Examples.DashSlashEx(),
@@ -137,6 +120,8 @@ namespace AbilityChangerExample
                     new Examples.ScreamEx(),
                     new Examples.SuperDashEx(),
                     new Examples.WallJumpEx(),
+                    new RedFlowerDG (),
+                    new RedFlowerWings(),
                 };
 
             foreach (var ability in abilities)
