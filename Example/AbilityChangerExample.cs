@@ -10,16 +10,16 @@ using System.Collections.Generic;
 
 namespace AbilityChangerExample
 {
-    public class WhiteFlowerDG : Dreamgate
+    public class RedFlowerDG : Dreamgate
     {
-        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("flower.png"); }
+        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("white_flower.png"); }
         public override string name { get => "White Flower"; set { } }
 
         public override string title { get => "White Flower"; set { } }
         public override string description { get => "Plants a little white delicate flower"; set { } }
         public override Sprite activeSprite { get => getActiveSprite(); set { } }
 
-        public WhiteFlowerDG()
+        public RedFlowerDG()
         {
             OnSelect += () =>
             {
@@ -27,10 +27,10 @@ namespace AbilityChangerExample
                 {
                     fromState = states.Set,
                     toStateDefault = states.SpawnGate,
-                    toStateCustom = AbilityChangerExample.flower == null ? "Set Fail" : "Set Recover",
+                    toStateCustom = AbilityChangerExample.white_flower == null ? "Set Fail" : "Set Recover",
                     eventName = "FINISHED",
                     shouldIntercept = () => true,
-                    onIntercept = (a, b) => GameObject.Instantiate(AbilityChangerExample.flower,HeroController.instance.transform.position + new Vector3(0, -1.42f, -0.0035f),
+                    onIntercept = (a, b) => GameObject.Instantiate(AbilityChangerExample.red_flower,HeroController.instance.transform.position + new Vector3(0, -1.42f, -0.0035f),
                                             Quaternion.identity).SetActive(true)
 
                 });
@@ -41,7 +41,7 @@ namespace AbilityChangerExample
     }
     public class GreenFlowerDG : Dreamgate
     {
-        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("flower3.png"); }
+        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("green_flower.png"); }
         public override string name { get => "Green Flower"; set { } }
         public override string title { get => "Green Flower"; set { } }
         public override string description { get => "Plants a little green delicate flower"; set { } }
@@ -49,44 +49,20 @@ namespace AbilityChangerExample
 
         public GreenFlowerDG()
         {
-            ReplaceSpawn(AbilityChangerExample.flower3);
+            ReplaceSpawn(AbilityChangerExample.green_flower);
             relatedAbilities.Add(AbilityChanger.Abilities.DREAMNAIL, "Green Flower");
         }
     }
 
-    public class RedFlowerDN : DreamNail
+    public class RedFlowerWings : DoubleJump
     {
-        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("flower2.png"); }
-        public override string name { get => "Green Flower"; set { } }
-        public override string title { get => "Green Flower"; set { } }
-        public override string description { get => "Plants a little green delicate flower"; set { } }
-        public override Sprite activeSprite { get => getActiveSprite(); set { } }
-
-        public RedFlowerDN()
-        {
-            OnSelect += () =>
-                {
-                    myFsm.AddAction("Slash", new CustomFsmAction(() =>
-                    {
-                        GameObject.Instantiate(AbilityChangerExample.flower2,
-                                                HeroController.instance.transform.position, Quaternion.identity).SetActive(true);
-                    }));
-                };
-
-            relatedAbilities.Add(AbilityChanger.Abilities.DREAMGATE, "Green Flower");
-
-        }
-    }
-
-    public class WhiteFlowerWings : DoubleJump
-    {
-        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("flower.png"); }
+        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("red_flower.png"); }
         public override string name { get => "White Flower"; set { } }
         public override string title { get => "White Flower"; set { } }
         public override string description { get => "Plants a little green delicate flower"; set { } }
         public override Sprite activeSprite { get => getActiveSprite(); set { } }
 
-        public WhiteFlowerWings()
+        public RedFlowerWings()
         {
             OnSelect += () => { On.HeroController.DoubleJump += SpawnWingsFlower; };
             OnUnselect += () => { On.HeroController.DoubleJump -= SpawnWingsFlower; };
@@ -94,97 +70,74 @@ namespace AbilityChangerExample
 
         private void SpawnWingsFlower(On.HeroController.orig_DoubleJump orig, HeroController self)
         {
-            GameObject.Instantiate(AbilityChangerExample.flower, HeroController.instance.transform.position,
+            GameObject.Instantiate(AbilityChangerExample.white_flower, HeroController.instance.transform.position,
                      Quaternion.identity).SetActive(true);
             orig(self);
         }
     }
 
-    public class RedFlowerWings : DoubleJump
-    {
-        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("flower2.png"); }
-        public override string name { get => "Red Flower"; set { } }
-        public override string title { get => "Red Flower"; set { } }
-        public override string description { get => "Plants a little green delicate flower"; set { } }
-        public override Sprite activeSprite { get => getActiveSprite(); set { } }
-
-        public RedFlowerWings()
-        {
-            RegisterOnDoDoubleJump(() =>
-            {
-                GameObject.Instantiate(AbilityChangerExample.flower2, HeroController.instance.transform.position,
-                                     Quaternion.identity).SetActive(true);
-                return true;
-            });
-        }
-    }
-
-    public class GreenFlowerScream : Scream
-    {
-        static Sprite getActiveSprite() { return Satchel.AssemblyUtils.GetSpriteFromResources("flower3.png"); }
-        public override string name { get => "Green Flower"; set { } }
-        public override string title { get => "Green Flower"; set { } }
-        public override string description { get => "Plants a little green delicate flower"; set { } }
-        public override Sprite activeSprite { get => getActiveSprite(); set { } }
-
-        public GreenFlowerScream()
-        {
-            RegisterTrigger(() =>
-            {
-                GameObject.Instantiate(AbilityChangerExample.flower3, HeroController.instance.transform.position,
-                                     Quaternion.identity).SetActive(true);
-            },false);
-        }
-    }
-
     public class AbilityChangerExample : Mod, IMenuMod
     {
-        public static GameObject flower, flower2, flower3;
+        public static GameObject white_flower, red_flower, green_flower;
         public override string GetVersion() => "1.0";
-        Ability[] abilities = { 
-            new WhiteFlowerDG(),
-            new GreenFlowerDG(),
-            new RedFlowerDN(),
-            new RedFlowerWings(),
-            new WhiteFlowerWings(),
-            new GreenFlowerScream()
-        };
+
+        List<Ability> abilities;
         public override void Initialize()
         {
             #region Defining GOs
-            flower = new GameObject()
+            white_flower = new GameObject()
             {
-                name = "flower"
+                name = "white_flower"
             };
-            SpriteRenderer sr = flower.AddComponent<SpriteRenderer>();
-            Texture2D tex = AssemblyUtils.GetTextureFromResources("flower.png");
+            SpriteRenderer sr = white_flower.AddComponent<SpriteRenderer>();
+            Texture2D tex = AssemblyUtils.GetTextureFromResources("white_flower.png");
             sr.sprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 128f, 0, SpriteMeshType.FullRect);
             sr.color = new Color(1f, 1f, 1f, 1.0f);
-            flower.SetActive(false);
-            GameObject.DontDestroyOnLoad(flower);
+            white_flower.SetActive(false);
+            GameObject.DontDestroyOnLoad(white_flower);
 
-            flower2 = new GameObject()
+            green_flower = new GameObject()
             {
-                name = "flower2"
+                name = "green_flower"
             };
-            sr = flower2.AddComponent<SpriteRenderer>();
-            tex = AssemblyUtils.GetTextureFromResources("flower2.png");
+            sr = green_flower.AddComponent<SpriteRenderer>();
+            tex = AssemblyUtils.GetTextureFromResources("green_flower.png");
             sr.sprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 128f, 0, SpriteMeshType.FullRect);
             sr.color = new Color(1f, 1f, 1f, 1.0f);
-            flower2.SetActive(false);
-            GameObject.DontDestroyOnLoad(flower2);
+            green_flower.SetActive(false);
+            GameObject.DontDestroyOnLoad(green_flower);
 
-            flower3 = new GameObject()
+            red_flower = new GameObject()
             {
-                name = "flower3"
+                name = "red_flower"
             };
-            sr = flower3.AddComponent<SpriteRenderer>();
-            tex = AssemblyUtils.GetTextureFromResources("flower3.png");
+            sr = red_flower.AddComponent<SpriteRenderer>();
+            tex = AssemblyUtils.GetTextureFromResources("red_flower.png");
             sr.sprite = Sprite.Create(tex, new Rect(0f, 0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 128f, 0, SpriteMeshType.FullRect);
             sr.color = new Color(1f, 1f, 1f, 1.0f);
-            flower3.SetActive(false);
-            GameObject.DontDestroyOnLoad(flower3);
+            red_flower.SetActive(false);
+            GameObject.DontDestroyOnLoad(red_flower);
             #endregion
+
+            abilities = new() {
+                    new RedFlowerDG (),
+                    new GreenFlowerDG(),
+                    new RedFlowerWings(),
+                    new Examples.CycloneSlashEx(),
+                    new Examples.DashEx(),
+                    new Examples.DashSlashEx(),
+                    new Examples.DoubleJumpEx(),
+                    new Examples.DreamGateEx(),
+                    new Examples.DreamNailEx(),
+                    new Examples.FireballEx(),
+                    new Examples.FocusEx(),
+                    new Examples.GreatSlashEx(),
+                    new Examples.NailEx(),
+                    new Examples.QuakeEx(),
+                    new Examples.ScreamEx(),
+                    new Examples.SuperDashEx(),
+                    new Examples.WallJumpEx(),
+                };
 
             foreach (var ability in abilities)
             {
@@ -209,7 +162,7 @@ namespace AbilityChangerExample
                         {
                             ability.setAquireAbility(opt switch { 0 => false, 1 => true, _ => throw new InvalidOperationException() });
                         },
-                        Loader = () => ability.aquiredAbility switch { false => 0, true => 1 }
+                        Loader = () => ability.hasAbility() switch { false => 0, true => 1 }
                     });
                 }
             }
