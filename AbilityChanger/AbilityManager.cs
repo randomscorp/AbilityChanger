@@ -220,7 +220,7 @@ namespace AbilityChanger
             }
             
             if(sheet == "UI" && title == inventoryDescKey && options.Count() > 1){
-                string final = isCustom() ? orig: currentAbility.description;
+                string final = isCustom() ? currentAbility.description: orig;
                 return $"Press the confirm button to cycle abilities. <br><br>{final}";
             }
             return orig;
